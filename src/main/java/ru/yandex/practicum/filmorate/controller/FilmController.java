@@ -12,7 +12,7 @@ import java.util.*;
 @Slf4j
 @RestController
 public class FilmController {
-    private final LocalDate FIRST_FILM = LocalDate.of(1895, 12, 28);
+    private final LocalDate firstFilmDate = LocalDate.of(1895, 12, 28);
     private Integer id = 1;
     private Map<Integer, Film> films = new HashMap<>();
 
@@ -50,7 +50,7 @@ public class FilmController {
 
         if (!(film.getName() == null) && !film.getName().isEmpty() &&
                 film.getDescription().length() <= 200 &&
-                film.getReleaseDate().isAfter(FIRST_FILM) &&
+                film.getReleaseDate().isAfter(firstFilmDate) &&
                 film.getDuration() > 0) {
             return true;
         }
