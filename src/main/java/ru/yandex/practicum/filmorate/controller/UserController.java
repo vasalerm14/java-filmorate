@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,7 +24,7 @@ public class UserController {
         log.debug("Получен запрос POST /users");
         validation(user);
         user.setId(id++);
-        if (user.getName() == null) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
@@ -37,10 +38,8 @@ public class UserController {
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
         } else {
-            throw new ValidationException("Ошибка валидации");
+            throw new ValidationException("Пользователь не найден");
         }
-
-
         return user;
     }
 
@@ -48,14 +47,15 @@ public class UserController {
     @GetMapping("/users")
     public Collection<User> getAllFilms() {
         log.debug("Получен запрос GET /users");
-        return users.values();
+        return List.copyOf(users.values());
     }
 
 
-    private boolean validation(User user) {
+    public boolean validation(User user) {
         LocalDate today = LocalDate.now();
         if (user.getEmail().contains("@") && !user.getEmail().isBlank()
-                && !user.getLogin().isBlank() && !user.getBirthday().isAfter(today)) {
+                && !user.getLogin().isBlank() && !user.getBirthday().isAfter(today) &&
+                !user.getLogin().contains(" ")) {
             return true;
         }
         throw new ValidationException("Ошибка валидации");
