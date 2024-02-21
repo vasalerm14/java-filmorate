@@ -25,6 +25,7 @@ public class UserController {
         validation(user);
         user.setId(id++);
         if (user.getName() == null || user.getName().isEmpty()) {
+            log.info("Пользователь добавлен с id: {} POST /users",user.getId());
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
@@ -36,11 +37,11 @@ public class UserController {
         log.debug("Получен запрос PUT /users");
         validation(user);
         if (users.containsKey(user.getId())) {
+            log.info("Пользователь с id: {} успешно обновлен PUT /users",user.getId());
             users.put(user.getId(), user);
-        } else {
-            throw new ValidationException("Пользователь не найден");
+            return user;
         }
-        return user;
+        throw new ValidationException("Пользователь не найден");
     }
 
 
@@ -51,14 +52,14 @@ public class UserController {
     }
 
 
-    public boolean validation(User user) {
+    public void validation(User user) {
         LocalDate today = LocalDate.now();
-        if (user.getEmail().contains("@") && !user.getEmail().isBlank()
-                && !user.getLogin().isBlank() && !user.getBirthday().isAfter(today) &&
-                !user.getLogin().contains(" ")) {
-            return true;
+        if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
+            throw new ValidationException("Некорректный email");
+        } else if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+            throw new ValidationException("Некорректный логин");
+        } else if (user.getBirthday() == null || user.getBirthday().isAfter(today)) {
+            throw new ValidationException("Некорректная дата рождения");
         }
-        throw new ValidationException("Ошибка валидации");
-
     }
 }

@@ -22,5 +22,5 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     @Positive
-    private int duration;
+    private Integer duration;
 }

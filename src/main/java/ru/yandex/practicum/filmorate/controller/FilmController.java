@@ -7,7 +7,11 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -18,26 +22,25 @@ public class FilmController {
 
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
-
         log.debug("Получен запрос POST /films");
-        if (validation(film)) {
-            film.setId(id++);
-            films.put(film.getId(), film);
-        }
+        validation(film);
+        film.setId(id++);
+        log.info("Фильм c id: {} добавлен в библиотеку POST /films",film.getId());
+        films.put(film.getId(), film);
         return film;
     }
 
     @PutMapping(value = "/films")
     public Film update(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films");
-
-        if (films.containsKey(film.getId()) && validation(film)) {
+        validation(film);
+        if (films.containsKey(film.getId())) {
+            log.info("Фильм c id: {} обновлен PUT /films",film.getId());
             films.put(film.getId(), film);
-        } else if (validation(film)) {
-            throw new ValidationException("Фильм не найден");
+            return film;
         }
-
-        return film;
+        log.info("Фильм не найден PUT /films");
+        throw new ValidationException("Фильм не найден в библиотеке");
     }
 
     @GetMapping("/films")
@@ -46,16 +49,19 @@ public class FilmController {
         return List.copyOf(films.values());
     }
 
-    public boolean validation(Film film) {
-
-        if (!(film.getName() == null) && !film.getName().isEmpty() &&
-                film.getDescription().length() <= 200 &&
-                film.getReleaseDate().isAfter(firstFilmDate) &&
-                film.getDuration() > 0) {
-            return true;
+    public void validation(Film film) {
+        if (film.getName() == null || film.getName().isEmpty()) {
+            log.warn("Ошибка валидации");
+            throw new ValidationException("Пустое имя фильма");
+        } else if (film.getDescription() == null || film.getDescription().length() > 200) {
+            log.warn("Ошибка валидации");
+            throw new ValidationException("Слишком длинное описание");
+        } else if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(firstFilmDate)) {
+            log.warn("Ошибка валидации");
+            throw new ValidationException("Некоректная дата релиза");
+        } else if (film.getDuration() == null || film.getDuration() < 0) {
+            log.warn("Ошибка валидации");
+            throw new ValidationException("Некорректная длина фильма");
         }
-        log.warn("Ошибка валидации");
-        throw new ValidationException("Ошибка валидации");
-
     }
 }
