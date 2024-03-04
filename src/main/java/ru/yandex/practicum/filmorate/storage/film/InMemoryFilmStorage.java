@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final LocalDate firstFilmDate = LocalDate.of(1895, 12, 28);
@@ -52,8 +53,8 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
-    public Film getFilm(Integer id){
-        if(!films.containsKey(id)){
+    public Film getFilm(Integer id) {
+        if (!films.containsKey(id)) {
             throw new NotFoundException("Фильм не найден");
         }
         return films.get(id);
