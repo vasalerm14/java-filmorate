@@ -14,8 +14,8 @@ import java.util.Set;
 @Slf4j
 public class UserService {
 
-    public User addFriend(User user, Integer addId,InMemoryUserStorage inMemoryUserStorage) {
-        if(user == null || !inMemoryUserStorage.containUser(addId)) {
+    public User addFriend(User user, Integer addId, InMemoryUserStorage inMemoryUserStorage) {
+        if (user == null || !inMemoryUserStorage.containUser(addId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
         Set<Integer> oldFriends = user.getFriends();
@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public User removeFriend(User user, Integer removeId) {
-        if(user == null){
+        if (user == null) {
             throw new NotFoundException("Объект класса User не найден");
         }
         Set<Integer> oldFriends = user.getFriends();
@@ -38,30 +38,28 @@ public class UserService {
         return user;
     }
 
-    public Set<User> getAllFriends(User user,InMemoryUserStorage inMemoryUserStorage){
+    public Set<User> getAllFriends(User user, InMemoryUserStorage inMemoryUserStorage) {
         Set<User> friends = new LinkedHashSet<>();
-        for(Integer friendId : user.getFriends()){
-            log.warn("userId {}",friendId);
+        for (Integer friendId : user.getFriends()) {
+            log.warn("userId {}", friendId);
             friends.add(inMemoryUserStorage.getUser(friendId));
-
         }
         return friends;
     }
 
-    public Set<User> getAllMutualFriends(User user1, User user2,InMemoryUserStorage inMemoryUserStorage){
-        if(user1 == null || user2 == null){
+    public Set<User> getAllMutualFriends(User user1, User user2, InMemoryUserStorage inMemoryUserStorage) {
+        if (user1 == null || user2 == null) {
             throw new NotFoundException("Объекты класса User не найдены");
         }
         Set<User> mutualFriends = new HashSet<>();
-        for(Integer friendId : user1.getFriends()){
-            if(user2.getFriends().contains(friendId)){
+        for (Integer friendId : user1.getFriends()) {
+            if (user2.getFriends().contains(friendId)) {
                 mutualFriends.add(inMemoryUserStorage.getUser(friendId));
 
             }
         }
         return mutualFriends;
     }
-
 
 
 }
