@@ -28,13 +28,17 @@ public class UserService {
         return user;
     }
 
-    public User removeFriend(User user, Integer removeId) {
-        if (user == null) {
+    public User removeFriend(User user, Integer removeId, InMemoryUserStorage inMemoryUserStorage) {
+        if (user == null || !inMemoryUserStorage.containUser(removeId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
         Set<Integer> oldFriends = user.getFriends();
         oldFriends.remove(removeId);
         user.setFriends(oldFriends);
+        User user2 = inMemoryUserStorage.getUser(removeId);
+        Set<Integer> oldFriends2 = user2.getFriends();
+        oldFriends2.remove(user.getId());
+        user2.setFriends(oldFriends2);
         return user;
     }
 
