@@ -13,10 +13,10 @@ import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
 @Service
 @Slf4j
-public class FilmService extends InMemoryFilmStorage{
+public class FilmService extends InMemoryFilmStorage {
 
     public Film addLike(Integer filmId, Integer userId) {
-        if(getFilm(filmId)==null){
+        if (getFilm(filmId) == null) {
             throw new NotFoundException("Объект класса Film не найден");
         }
         getFilm(filmId).getLikes().add(userId);
@@ -40,6 +40,4 @@ public class FilmService extends InMemoryFilmStorage{
                 .limit(count)
                 .collect(Collectors.toList());
     }
-
-
 }
