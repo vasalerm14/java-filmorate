@@ -21,7 +21,7 @@ public class FilmService extends InMemoryFilmStorage {
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
-        return getFilm(filmId);
+        return film;
     }
 
     public Film removeLike(Integer id, Integer userId) {
@@ -30,7 +30,7 @@ public class FilmService extends InMemoryFilmStorage {
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
-        return getFilm(id);
+        return film;
     }
 
     public List<Film> mostPopular(Integer count) {
