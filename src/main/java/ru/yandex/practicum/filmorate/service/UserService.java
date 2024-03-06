@@ -15,7 +15,7 @@ import java.util.Set;
 public class UserService extends InMemoryUserStorage {
 
     public User addFriend(Integer id, Integer friendId) {
-        if (getUser(id) == null || !containUser(friendId)) {
+        if (getUser(id) == null || !getUser(id).getFriends().contains(friendId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
         getUser(id).getFriends().add(friendId);
@@ -24,7 +24,7 @@ public class UserService extends InMemoryUserStorage {
     }
 
     public User removeFriend(Integer id, Integer removeId) {
-        if (getUser(id) == null || !containUser(removeId)) {
+        if (getUser(id) == null || !getUser(id).getFriends().contains(removeId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
         getUser(id).getFriends().remove(removeId);
