@@ -21,6 +21,7 @@ public class FilmService extends InMemoryFilmStorage {
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
+        update(film);
         return film;
     }
 
@@ -30,6 +31,7 @@ public class FilmService extends InMemoryFilmStorage {
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
+        update(film);
         return film;
     }
 

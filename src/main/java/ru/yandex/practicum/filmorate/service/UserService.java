@@ -20,6 +20,7 @@ public class UserService extends InMemoryUserStorage {
         if (getUser(id) == null || getUser(friendId) == null) {
             throw new NotFoundException("Объект класса User не найден");
         }
+
         user.getFriends().add(friendId);
         user1.getFriends().add(id);
         update(user);
