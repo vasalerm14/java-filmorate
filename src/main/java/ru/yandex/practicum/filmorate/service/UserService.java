@@ -12,54 +12,42 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class UserService {
+public class UserService extends InMemoryUserStorage {
 
-    public User addFriend(User user, Integer addId, InMemoryUserStorage inMemoryUserStorage) {
-        if (user == null || !inMemoryUserStorage.containUser(addId)) {
+    public User addFriend(Integer id, Integer friendId) {
+        if (getUser(id) == null || !containUser(friendId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
-        Set<Integer> oldFriends = user.getFriends();
-        oldFriends.add(addId);
-        user.setFriends(oldFriends);
-        User user2 = inMemoryUserStorage.getUser(addId);
-        Set<Integer> oldFriends2 = user2.getFriends();
-        oldFriends2.add(user.getId());
-        user2.setFriends(oldFriends2);
-        return user;
+        getUser(id).getFriends().add(friendId);
+        getUser(friendId).getFriends().add(id);
+        return getUser(id);
     }
 
-    public User removeFriend(User user, Integer removeId, InMemoryUserStorage inMemoryUserStorage) {
-        if (user == null || !inMemoryUserStorage.containUser(removeId)) {
+    public User removeFriend(Integer id, Integer removeId) {
+        if (getUser(id) == null || !containUser(removeId)) {
             throw new NotFoundException("Объект класса User не найден");
         }
-        Set<Integer> oldFriends = user.getFriends();
-        oldFriends.remove(removeId);
-        user.setFriends(oldFriends);
-        User user2 = inMemoryUserStorage.getUser(removeId);
-        Set<Integer> oldFriends2 = user2.getFriends();
-        oldFriends2.remove(user.getId());
-        user2.setFriends(oldFriends2);
-        return user;
+        getUser(id).getFriends().remove(removeId);
+        getUser(removeId).getFriends().remove(id);
+        return getUser(id);
     }
 
-    public Set<User> getAllFriends(User user, InMemoryUserStorage inMemoryUserStorage) {
+    public Set<User> getAllFriends(Integer id) {
         Set<User> friends = new LinkedHashSet<>();
-        for (Integer friendId : user.getFriends()) {
-            log.warn("userId {}", friendId);
-            friends.add(inMemoryUserStorage.getUser(friendId));
+        for (Integer friendId : getUser(id).getFriends()) {
+            friends.add(getUser(friendId));
         }
         return friends;
     }
 
-    public Set<User> getAllMutualFriends(User user1, User user2, InMemoryUserStorage inMemoryUserStorage) {
-        if (user1 == null || user2 == null) {
+    public Set<User> getAllMutualFriends(Integer id, Integer otherId) {
+        if (getUser(id) == null || getUser(otherId) == null) {
             throw new NotFoundException("Объекты класса User не найдены");
         }
         Set<User> mutualFriends = new HashSet<>();
-        for (Integer friendId : user1.getFriends()) {
-            if (user2.getFriends().contains(friendId)) {
-                mutualFriends.add(inMemoryUserStorage.getUser(friendId));
-
+        for (Integer friendId : getUser(id).getFriends()) {
+            if (getUser(otherId).getFriends().contains(friendId)) {
+                mutualFriends.add(getUser(friendId));
             }
         }
         return mutualFriends;
