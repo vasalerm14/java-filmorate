@@ -22,6 +22,8 @@ public class UserService extends InMemoryUserStorage {
         }
         user.getFriends().add(friendId);
         user1.getFriends().add(id);
+        update(user);
+        update(user1);
         return user;
     }
 
@@ -33,6 +35,8 @@ public class UserService extends InMemoryUserStorage {
         }
         user.getFriends().remove(removeId);
         user1.getFriends().remove(id);
+        update(user);
+        update(user1);
         return user;
     }
 
