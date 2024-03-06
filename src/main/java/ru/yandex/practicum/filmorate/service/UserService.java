@@ -60,6 +60,4 @@ public class UserService extends InMemoryUserStorage {
         }
         return mutualFriends;
     }
-
-
 }
