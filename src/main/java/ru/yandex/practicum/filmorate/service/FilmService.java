@@ -16,18 +16,20 @@ import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 public class FilmService extends InMemoryFilmStorage {
 
     public Film addLike(Integer filmId, Integer userId) {
-        if (getFilm(filmId) == null) {
+        Film film = getFilm(filmId);
+        if (film == null) {
             throw new NotFoundException("Объект класса Film не найден");
         }
-        getFilm(filmId).getLikes().add(userId);
+        film.getLikes().add(userId);
         return getFilm(filmId);
     }
 
     public Film removeLike(Integer id, Integer userId) {
-        if (getFilm(id) == null || userId < 0) {
+        Film film = getFilm(id);
+        if (film == null || userId < 0) {
             throw new NotFoundException("Объект класса Film не найден");
         }
-        getFilm(id).getLikes().add(userId);
+        film.getLikes().add(userId);
         return getFilm(id);
     }
 
