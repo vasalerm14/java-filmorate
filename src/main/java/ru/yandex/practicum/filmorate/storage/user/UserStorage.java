@@ -11,5 +11,4 @@ public interface UserStorage {
 
     Collection<User> getAllFilms();
 
-    void validation(User user);
 }

@@ -32,25 +32,25 @@ public class UserController {
     @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
         log.debug("Получен запрос POST /users");
-        return userService.create(user);
+        return userService.inMemoryUserStorage.create(user);
     }
 
     @PutMapping(value = "/users")
     public User update(@Valid @RequestBody User user) {
         log.debug("Получен запрос PUT /users");
-        return userService.update(user);
+        return userService.inMemoryUserStorage.update(user);
     }
 
 
     @GetMapping("/users")
     public Collection<User> getAllUsers() {
         log.debug("Получен запрос GET /users");
-        return userService.getAllFilms();
+        return userService.inMemoryUserStorage.getAllFilms();
     }
 
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable int id) {
-        return userService.getUser(id);
+        return userService.inMemoryUserStorage.getUser(id);
     }
 
 
