@@ -38,7 +38,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Collection<User> getAllFilms() {
+    public Collection<User> getAllUsers() {
         return List.copyOf(users.values());
     }
 

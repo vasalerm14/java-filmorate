@@ -16,13 +16,29 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 @Service
 @Slf4j
 public class FilmService {
-    public InMemoryFilmStorage inMemoryFilmStorage;
-    public InMemoryUserStorage inMemoryUserStorage;
+    private InMemoryFilmStorage inMemoryFilmStorage;
+    private InMemoryUserStorage inMemoryUserStorage;
 
     @Autowired
     public FilmService(InMemoryFilmStorage inMemoryFilmStorage, InMemoryUserStorage inMemoryUserStorage) {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
         this.inMemoryUserStorage = inMemoryUserStorage;
+    }
+
+    public Film create(Film film) {
+        return inMemoryFilmStorage.create(film);
+    }
+
+    public Film update(Film film) {
+        return inMemoryFilmStorage.update(film);
+    }
+
+    public Collection<Film> getAllFilms() {
+        return inMemoryFilmStorage.getAllFilms();
+    }
+
+    public Film getFilm(int id) {
+        return inMemoryFilmStorage.getFilm(id);
     }
 
     public Film addLike(Integer filmId, Integer userId) {
@@ -31,17 +47,16 @@ public class FilmService {
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
-        inMemoryFilmStorage.update(film);
         return film;
     }
 
     public Film removeLike(Integer id, Integer userId) {
         Film film = inMemoryFilmStorage.getFilm(id);
         if (film == null || inMemoryUserStorage.getUser(userId) == null) {
+
             throw new NotFoundException("Объект класса Film не найден");
         }
         film.getLikes().add(userId);
-        inMemoryFilmStorage.update(film);
         return film;
     }
 

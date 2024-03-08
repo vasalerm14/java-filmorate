@@ -32,24 +32,24 @@ public class FilmController {
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
         log.debug("Получен запрос POST /films");
-        return filmService.inMemoryFilmStorage.create(film);
+        return filmService.create(film);
     }
 
     @PutMapping(value = "/films")
     public Film update(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films");
-        return filmService.inMemoryFilmStorage.update(film);
+        return filmService.update(film);
     }
 
     @GetMapping("/films")
     public Collection<Film> getAllFilms() {
         log.debug("Получен запрос GET /films");
-        return filmService.inMemoryFilmStorage.getAllFilms();
+        return filmService.getAllFilms();
     }
 
     @GetMapping("/films/{id}")
     public Film getFilm(@PathVariable int id) {
-        return filmService.inMemoryFilmStorage.getFilm(id);
+        return filmService.getFilm(id);
     }
 
     @PutMapping("/films/{id}/like/{userId}")

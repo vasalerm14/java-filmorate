@@ -9,6 +9,6 @@ public interface UserStorage {
 
     User update(User user);
 
-    Collection<User> getAllFilms();
+    Collection<User> getAllUsers();
 
 }
