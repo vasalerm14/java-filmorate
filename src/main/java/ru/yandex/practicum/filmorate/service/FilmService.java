@@ -3,21 +3,26 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 @Service
 @Slf4j
-public class FilmService {
-    private InMemoryFilmStorage inMemoryFilmStorage;
-    private InMemoryUserStorage inMemoryUserStorage;
+public class FilmService implements FilmStorage {
+    private FilmStorage inMemoryFilmStorage;
+    private UserStorage inMemoryUserStorage;
 
     @Autowired
     public FilmService(InMemoryFilmStorage inMemoryFilmStorage, InMemoryUserStorage inMemoryUserStorage) {
@@ -35,6 +40,16 @@ public class FilmService {
 
     public Collection<Film> getAllFilms() {
         return inMemoryFilmStorage.getAllFilms();
+    }
+
+    @Override
+    public void validation(Film film) {
+        inMemoryFilmStorage.validation(film);
+    }
+
+    @Override
+    public Film getFilm(Integer id) {
+        return inMemoryFilmStorage.getFilm(id);
     }
 
     public Film getFilm(int id) {

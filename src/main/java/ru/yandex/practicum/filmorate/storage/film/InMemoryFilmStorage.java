@@ -44,17 +44,11 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void validation(Film film) {
-        if (film.getName() == null || film.getName().isEmpty()) {
-            throw new ValidationException("Пустое имя фильма");
-        } else if (film.getDescription() == null || film.getDescription().length() > 200) {
-            throw new ValidationException("Слишком длинное описание");
-        } else if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(firstFilmDate)) {
+        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(firstFilmDate)) {
             throw new ValidationException("Некоректная дата релиза");
-        } else if (film.getDuration() == null || film.getDuration() < 0) {
-            throw new ValidationException("Некорректная длина фильма");
         }
     }
-
+    @Override
     public Film getFilm(Integer id) {
         if (!films.containsKey(id)) {
             throw new NotFoundException("Фильм не найден");
