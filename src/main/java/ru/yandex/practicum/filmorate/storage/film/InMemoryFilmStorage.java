@@ -48,6 +48,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new ValidationException("Некоректная дата релиза");
         }
     }
+
     @Override
     public Film getFilm(Integer id) {
         if (!films.containsKey(id)) {
