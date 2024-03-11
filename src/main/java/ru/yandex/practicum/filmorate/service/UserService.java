@@ -49,12 +49,12 @@ public class UserService implements UserStorage {
 
     public User addFriend(Integer id, Integer friendId) {
         User user = inMemoryUserStorage.getUser(id);
-        User user1 = inMemoryUserStorage.getUser(friendId);
+        User friend = inMemoryUserStorage.getUser(friendId);
         if (inMemoryUserStorage.getUser(id) == null || inMemoryUserStorage.getUser(friendId) == null) {
             throw new NotFoundException("Объект класса User не найден");
         }
         user.getFriends().add(friendId);
-        user1.getFriends().add(id);
+        friend.getFriends().add(id);
         return user;
     }
 
