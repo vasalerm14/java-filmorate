@@ -20,7 +20,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 @Service
 @Slf4j
-public class FilmService implements FilmStorage {
+public class FilmService {
     private FilmStorage inMemoryFilmStorage;
     private UserStorage inMemoryUserStorage;
 
@@ -40,16 +40,6 @@ public class FilmService implements FilmStorage {
 
     public Collection<Film> getAllFilms() {
         return inMemoryFilmStorage.getAllFilms();
-    }
-
-    @Override
-    public void validation(Film film) {
-        inMemoryFilmStorage.validation(film);
-    }
-
-    @Override
-    public Film getFilm(Integer id) {
-        return inMemoryFilmStorage.getFilm(id);
     }
 
     public Film getFilm(int id) {

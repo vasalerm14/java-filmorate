@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class UserService implements UserStorage {
+public class UserService {
     private UserStorage inMemoryUserStorage;
 
     @Autowired
@@ -23,24 +23,19 @@ public class UserService implements UserStorage {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    @Override
+
     public User create(User user) {
         return inMemoryUserStorage.create(user);
     }
 
-    @Override
+
     public User update(User user) {
         return inMemoryUserStorage.update(user);
     }
 
-    @Override
+
     public Collection<User> getAllUsers() {
         return inMemoryUserStorage.getAllUsers();
-    }
-
-    @Override
-    public User getUser(Integer id) {
-        return inMemoryUserStorage.getUser(id);
     }
 
     public User getUser(int id) {
