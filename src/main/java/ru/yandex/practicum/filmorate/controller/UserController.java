@@ -1,65 +1,78 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
+@Controller
 public class UserController {
-    private Integer id = 1;
 
-    private Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
         log.debug("Получен запрос POST /users");
-        validation(user);
-        user.setId(id++);
-        if (user.getName() == null || user.getName().isEmpty()) {
-            log.info("Пользователь добавлен с id: {} POST /users",user.getId());
-            user.setName(user.getLogin());
-        }
-        users.put(user.getId(), user);
-        return user;
+        return userService.create(user);
     }
 
     @PutMapping(value = "/users")
     public User update(@Valid @RequestBody User user) {
         log.debug("Получен запрос PUT /users");
-        validation(user);
-        if (users.containsKey(user.getId())) {
-            log.info("Пользователь с id: {} успешно обновлен PUT /users",user.getId());
-            users.put(user.getId(), user);
-            return user;
-        }
-        throw new ValidationException("Пользователь не найден");
+        return userService.update(user);
     }
 
 
     @GetMapping("/users")
-    public Collection<User> getAllFilms() {
+    public Collection<User> getAllUsers() {
         log.debug("Получен запрос GET /users");
-        return List.copyOf(users.values());
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable int id) {
+        return userService.getUser(id);
     }
 
 
-    public void validation(User user) {
-        LocalDate today = LocalDate.now();
-        if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
-            throw new ValidationException("Некорректный email");
-        } else if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Некорректный логин");
-        } else if (user.getBirthday() == null || user.getBirthday().isAfter(today)) {
-            throw new ValidationException("Некорректная дата рождения");
-        }
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.addFriend(id, friendId);
     }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public User removeFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.removeFriend(id, friendId);
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public Set<User> getAllFriends(@PathVariable int id) {
+        return userService.getAllFriends(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Set<User> getAllMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getAllMutualFriends(id, otherId);
+    }
+
+
 }
