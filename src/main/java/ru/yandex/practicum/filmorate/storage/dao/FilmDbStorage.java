@@ -15,7 +15,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
