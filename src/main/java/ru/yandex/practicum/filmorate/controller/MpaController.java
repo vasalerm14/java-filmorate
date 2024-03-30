@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.dao.MpaDao;
 
 import java.util.Collection;
+
 @Slf4j
 @RestController
 public class MpaController {

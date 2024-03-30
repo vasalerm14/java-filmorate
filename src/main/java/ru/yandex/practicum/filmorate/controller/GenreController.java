@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
-public class GenreController{
+public class GenreController {
 
     private final GenreDao genreDao;
 
