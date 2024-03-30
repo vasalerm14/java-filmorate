@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.exceptionHandler;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,7 +19,7 @@ public class GlobalExceptionHandler extends Exception {
         return ErrorResponse.fromException(ex);
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({NotFoundException.class, EmptyResultDataAccessException.class, DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(Exception ex) {
         return ErrorResponse.fromException(ex);
