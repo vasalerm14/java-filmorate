@@ -31,14 +31,14 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-            String sqlQuery = "UPDATE USERS SET " + "email = ?, login = ?, name = ?, birthday = ? " + "WHERE id = ?";
-            jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
-            String sqlGet = "SELECT * FROM USERS WHERE id = ?";
-            User updatedUser = jdbcTemplate.queryForObject(sqlGet, this::mapRowToUser, user.getId());
-            if(updatedUser == null){
-                throw new NotFoundException("Пользователь с id: " + user.getId() + " не найден");
-            }
-            return updatedUser;
+        String sqlQuery = "UPDATE USERS SET " + "email = ?, login = ?, name = ?, birthday = ? " + "WHERE id = ?";
+        jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
+        String sqlGet = "SELECT * FROM USERS WHERE id = ?";
+        User updatedUser = jdbcTemplate.queryForObject(sqlGet, this::mapRowToUser, user.getId());
+        if (updatedUser == null) {
+            throw new NotFoundException("Пользователь с id: " + user.getId() + " не найден");
+        }
+        return updatedUser;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "SELECT u.*, f.friend_id " + "FROM Users u " + "LEFT JOIN Friendship f ON u.id = f.user_id " + "WHERE u.id = ?";
         User user;
         user = jdbcTemplate.queryForObject(sqlQuery, this::mapRowToUser, id);
-        if(user == null){
+        if (user == null) {
             throw new NotFoundException("Пользователь с id: " + id + " не найден");
         }
         user.setFriends(getFriendFromDB(user));
@@ -66,7 +66,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     public boolean checkUser(Integer id) {
-        User user =getUser(id);
+        User user = getUser(id);
         return (user != null);
     }
 
