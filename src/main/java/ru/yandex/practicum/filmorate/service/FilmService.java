@@ -8,8 +8,6 @@ import ru.yandex.practicum.filmorate.storage.dao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.dao.LikesDb;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Collection;
 
 @Service
