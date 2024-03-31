@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 
 
 @Slf4j
@@ -60,7 +59,6 @@ public class FilmController {
     public Film removeLike(@PathVariable int id, @PathVariable int userId) {
         return filmService.removeLike(id, userId);
     }
-
 
 
 }
