@@ -17,6 +17,7 @@ class UserDbStorageTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    //Почему-то не работает тест при запуске одновременно всех
 
 
 //    @Test

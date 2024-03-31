@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FriendDbStorageTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    //Почему-то не работает тест при запуске одновременно всех
 
 //    @Test
 //    public void testAddFriend() {

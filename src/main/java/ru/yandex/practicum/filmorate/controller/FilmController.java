@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,19 +26,16 @@ public class FilmController {
 
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос POST /films");
         return filmService.create(film);
     }
 
     @PutMapping(value = "/films")
     public Film update(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос PUT /films");
         return filmService.update(film);
     }
 
     @GetMapping("/films")
     public Collection<Film> getAllFilms() {
-        log.debug("Получен запрос GET /films");
         return filmService.getAllFilms();
     }
 
