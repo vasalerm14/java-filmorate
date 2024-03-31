@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.storage.dao.MpaDb;
 
 import java.util.Collection;
 
-@Slf4j
 @RestController
 public class MpaController {
     private final MpaDb mpaDao;

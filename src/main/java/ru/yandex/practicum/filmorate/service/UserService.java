@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Slf4j
 public class UserService {
     private UserStorage userStorage;
     private FriendStorage friendStorage;

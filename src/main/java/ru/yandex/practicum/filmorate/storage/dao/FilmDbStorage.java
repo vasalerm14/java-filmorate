@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.ArrayList;
 
 @Component
-@Slf4j
-
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
 

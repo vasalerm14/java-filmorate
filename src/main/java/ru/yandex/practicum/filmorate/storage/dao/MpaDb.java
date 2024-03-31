@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 @Component
-@Slf4j
 public class MpaDb implements MpaStorage {
     private final JdbcTemplate jdbcTemplate;
 

@@ -17,7 +17,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import javax.validation.Valid;
 import java.util.*;
 
-@Slf4j
 @RestController
 @Controller
 public class UserController {
@@ -31,20 +30,17 @@ public class UserController {
 
     @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
-        log.debug("Получен запрос POST /users");
         return userService.create(user);
     }
 
     @PutMapping(value = "/users")
     public User update(@Valid @RequestBody User user) {
-        log.debug("Получен запрос PUT /users");
         return userService.update(user);
     }
 
 
     @GetMapping("/users")
     public Collection<User> getAllUsers() {
-        log.debug("Получен запрос GET /users");
         return userService.getAllUsers();
     }
 

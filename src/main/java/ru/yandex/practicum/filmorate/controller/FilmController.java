@@ -15,8 +15,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
 import java.util.Collection;
 
-
-@Slf4j
 @RestController
 public class FilmController {
 
