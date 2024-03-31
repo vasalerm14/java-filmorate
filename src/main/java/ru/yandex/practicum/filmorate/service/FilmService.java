@@ -1,12 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-
-import lombok.extern.slf4j.Slf4j;
-
-
-import java.util.Collection;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -14,6 +7,10 @@ import ru.yandex.practicum.filmorate.storage.likes.LikesStorage;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.dao.LikesDb;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
 
 @Service
 @Slf4j
