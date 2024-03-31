@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ public class UserDbStorage implements UserStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     @Override
     public User create(User user) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("USERS").usingGeneratedKeyColumns("id");
@@ -33,25 +31,20 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-        try {
             String sqlQuery = "UPDATE USERS SET " + "email = ?, login = ?, name = ?, birthday = ? " + "WHERE id = ?";
             jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
             String sqlGet = "SELECT * FROM USERS WHERE id = ?";
             User updatedUser = jdbcTemplate.queryForObject(sqlGet, this::mapRowToUser, user.getId());
+            if(updatedUser == null){
+                throw new NotFoundException("Пользователь с id: " + user.getId() + " не найден");
+            }
             return updatedUser;
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("Пользователь не найден");
-        }
-
     }
-
 
     @Override
     public Collection<User> getAllUsers() {
         String sqlQuery = "SELECT * FROM Users";
         List<User> users = jdbcTemplate.query(sqlQuery, this::mapRowToUser);
-
-
         for (User user : users) {
             user.setFriends(getFriendFromDB(user));
         }
@@ -62,15 +55,19 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User getUser(Integer id) {
         String sqlQuery = "SELECT u.*, f.friend_id " + "FROM Users u " + "LEFT JOIN Friendship f ON u.id = f.user_id " + "WHERE u.id = ?";
-
         User user;
-        try {
-            user = jdbcTemplate.queryForObject(sqlQuery, this::mapRowToUser, id);
-            user.setFriends(getFriendFromDB(user));
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("Пользователь с id " + id + " не найден");
+        user = jdbcTemplate.queryForObject(sqlQuery, this::mapRowToUser, id);
+        if(user == null){
+            throw new NotFoundException("Пользователь с id: " + id + " не найден");
         }
+        user.setFriends(getFriendFromDB(user));
+
         return user;
+    }
+
+    public boolean checkUser(Integer id) {
+        User user =getUser(id);
+        return (user != null);
     }
 
 
@@ -91,8 +88,6 @@ public class UserDbStorage implements UserStorage {
         user.setLogin(resultSet.getString("login"));
         user.setName(resultSet.getString("name"));
         user.setBirthday(resultSet.getDate("birthday").toLocalDate());
-
-
         return user;
     }
 

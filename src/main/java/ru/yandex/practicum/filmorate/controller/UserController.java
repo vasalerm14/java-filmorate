@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Set<User> getAllMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+    public List<User> getAllMutualFriends(@PathVariable int id, @PathVariable int otherId) {
         return userService.getAllMutualFriends(id, otherId);
     }
 

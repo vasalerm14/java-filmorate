@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -57,7 +58,7 @@ public class UserService {
         return friendStorage.getAllFriends(id);
     }
 
-    public Set<User> getAllMutualFriends(Integer id, Integer otherId) {
+    public List<User> getAllMutualFriends(Integer id, Integer otherId) {
         return friendStorage.getAllMutualFriends(id, otherId);
     }
 }

@@ -27,7 +27,6 @@ public class Film {
     private Set<Integer> likes = new HashSet<>();
     private final LinkedHashSet<Genre> genres = new LinkedHashSet<>();
     private MPA mpa;
-
     public void setGenres(Collection<Genre> newGenres) {
         this.genres.clear();
         this.genres.addAll(newGenres);

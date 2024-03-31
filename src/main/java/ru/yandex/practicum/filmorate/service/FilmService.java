@@ -10,38 +10,38 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.Likes.Likes;
+import ru.yandex.practicum.filmorate.storage.likes.LikesStorage;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.dao.LikesDao;
+import ru.yandex.practicum.filmorate.storage.dao.LikesDb;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 @Service
 @Slf4j
 public class FilmService {
-    private FilmStorage filmDbStorage;
-    private Likes likes;
+    private FilmStorage filmStorage;
+    private LikesStorage likes;
 
 
     @Autowired
-    public FilmService(FilmDbStorage filmDbStorage, LikesDao likesDao) {
-        this.filmDbStorage = filmDbStorage;
-        this.likes = likesDao;
+    public FilmService(FilmDbStorage filmDbStorage, LikesDb likesDb) {
+        this.filmStorage = filmDbStorage;
+        this.likes = likesDb;
     }
 
     public Film create(Film film) {
-        return filmDbStorage.create(film);
+        return filmStorage.create(film);
     }
 
     public Film update(Film film) {
-        return filmDbStorage.update(film);
+        return filmStorage.update(film);
     }
 
     public Collection<Film> getAllFilms() {
-        return filmDbStorage.getAllFilms();
+        return filmStorage.getAllFilms();
     }
 
     public Film getFilm(int id) {
-        return filmDbStorage.getFilm(id);
+        return filmStorage.getFilm(id);
     }
 
     public Film addLike(Integer filmId, Integer userId) {
@@ -52,7 +52,4 @@ public class FilmService {
         return likes.removeLike(id, userId);
     }
 
-    public List<Film> mostPopular(Integer count) {
-        return filmDbStorage.mostPopular(count);
-    }
 }

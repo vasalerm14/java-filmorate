@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.MPA;
-import ru.yandex.practicum.filmorate.storage.dao.MpaDao;
+import ru.yandex.practicum.filmorate.storage.dao.MpaDb;
 
 import java.util.Collection;
 
 @Slf4j
 @RestController
 public class MpaController {
-    private final MpaDao mpaDao;
+    private final MpaDb mpaDao;
 
     @Autowired
-    public MpaController(MpaDao mpaDao) {
+    public MpaController(MpaDb mpaDao) {
         this.mpaDao = mpaDao;
     }
 
