@@ -4,10 +4,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.dao.FriendDbStorage;
-import ru.yandex.practicum.filmorate.storage.dao.GenreDb;
 import ru.yandex.practicum.filmorate.storage.dao.UserDbStorage;
 
 import java.time.LocalDate;
@@ -21,7 +19,7 @@ public class FriendDbStorageTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testAddFriend(){
+    public void testAddFriend() {
         FriendDbStorage friendDbStorage = new FriendDbStorage(jdbcTemplate);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         String userEmail = "test@mail.ru";
@@ -35,12 +33,13 @@ public class FriendDbStorageTest {
         newUser.setBirthday(birthday);
         userDbStorage.create(newUser);
         userDbStorage.create(newUser);
-        friendDbStorage.addFriend(1,2);
+        friendDbStorage.addFriend(1, 2);
         assertThat(friendDbStorage.getAllFriends(1).size())
                 .isEqualTo(1);
     }
+
     @Test
-    public void testRemoveFriend(){
+    public void testRemoveFriend() {
         FriendDbStorage friendDbStorage = new FriendDbStorage(jdbcTemplate);
         UserDbStorage userDbStorage = new UserDbStorage(jdbcTemplate);
         String userEmail = "test@mail.ru";
@@ -54,8 +53,8 @@ public class FriendDbStorageTest {
         newUser.setBirthday(birthday);
         userDbStorage.create(newUser);
         userDbStorage.create(newUser);
-        friendDbStorage.addFriend(1,2);
-        friendDbStorage.removeFriend(1,2);
+        friendDbStorage.addFriend(1, 2);
+        friendDbStorage.removeFriend(1, 2);
         assertThat(friendDbStorage.getAllFriends(1).size())
                 .isEqualTo(0);
     }

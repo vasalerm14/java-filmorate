@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDb;
-import ru.yandex.practicum.filmorate.storage.dao.MpaDb;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
