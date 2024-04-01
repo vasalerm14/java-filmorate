@@ -11,7 +11,7 @@ public interface FilmStorage {
 
     Collection<Film> getAllFilms();
 
-    void validation(Film film);
-
     Film getFilm(Integer id);
+
+
 }
