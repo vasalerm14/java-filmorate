@@ -25,10 +25,9 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private Integer duration;
-
-    private Set<Integer> likes = new HashSet<>();
     private final LinkedHashSet<Genre> genres = new LinkedHashSet<>();
     private MPA mpa;
+    private int likeCount;
 
     public void setGenres(Collection<Genre> newGenres) {
         this.genres.clear();
