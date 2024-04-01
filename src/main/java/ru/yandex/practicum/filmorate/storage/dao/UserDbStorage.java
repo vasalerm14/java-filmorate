@@ -43,10 +43,11 @@ public class UserDbStorage implements UserStorage {
     public Collection<User> getAllUsers() {
         String sqlQuery = "SELECT * FROM Users";
         List<User> users = jdbcTemplate.query(sqlQuery, this::mapRowToUser);
+        Map<Integer, Set<Integer>> userFriendsMap = getAllFriendsFromDB();
         for (User user : users) {
-            user.setFriends(getFriendFromDB(user));
+            Set<Integer> friendIds = userFriendsMap.getOrDefault(user.getId(), Collections.emptySet());
+            user.setFriends(friendIds);
         }
-
         return users;
     }
 
@@ -97,6 +98,19 @@ public class UserDbStorage implements UserStorage {
         }
         return null;
 
+    }
+
+    private Map<Integer, Set<Integer>> getAllFriendsFromDB() {
+        String sqlQuery = "SELECT user_id, friend_id FROM Friendship";
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlQuery);
+        Map<Integer, Set<Integer>> userFriendsMap = new HashMap<>();
+        for (Map<String, Object> row : rows) {
+            int userId = (int) row.get("user_id");
+            int friendId = (int) row.get("friend_id");
+            userFriendsMap.computeIfAbsent(userId, k -> new HashSet<>()).add(friendId);
+        }
+
+        return userFriendsMap;
     }
 
 }

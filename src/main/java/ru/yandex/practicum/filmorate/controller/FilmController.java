@@ -1,27 +1,25 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.likes.LikesStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class FilmController {
 
     private final FilmService filmService;
+    private final LikesStorage likesStorage;
 
     @Autowired
-    public FilmController(FilmService filmService) {
+    public FilmController(FilmService filmService, LikesStorage likesStorage) {
         this.filmService = filmService;
+        this.likesStorage = likesStorage;
     }
 
     @PostMapping(value = "/films")
@@ -52,6 +50,11 @@ public class FilmController {
     @DeleteMapping("/films/{id}/like/{userId}")
     public Film removeLike(@PathVariable int id, @PathVariable int userId) {
         return filmService.removeLike(id, userId);
+    }
+
+    @GetMapping("/films/popular")
+    public List<Film> getMostPopular(@RequestParam(defaultValue = "10") Integer count) {
+        return likesStorage.mostPopular(count);
     }
 
 

@@ -9,5 +9,5 @@ public interface LikesStorage {
 
     Film removeLike(Integer id, Integer userId);
 
-    List<Film> mostPopular(Integer count);
+    List<Film> mostPopular(int count);
 }

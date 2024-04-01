@@ -8,9 +8,7 @@ import ru.yandex.practicum.filmorate.storage.likes.LikesStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class LikesDb implements LikesStorage {
@@ -62,8 +60,25 @@ public class LikesDb implements LikesStorage {
         return new HashSet<>(userIds);
     }
 
+    public Map<Integer, Set<Integer>> getAllLikes() {
+        String sqlQuery = "SELECT film_id, user_id FROM Likes";
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlQuery);
+
+        Map<Integer, Set<Integer>> likesMap = new HashMap<>();
+
+        for (Map<String, Object> row : rows) {
+            int filmId = (int) row.get("film_id");
+            int userId = (int) row.get("user_id");
+
+            likesMap.computeIfAbsent(filmId, k -> new HashSet<>()).add(userId);
+        }
+
+        return likesMap;
+    }
+
+
     @Override
-    public List<Film> mostPopular(Integer count) {
+    public List<Film> mostPopular(int count) {
         String sql = "SELECT " +
                 "f.id, " +
                 "f.name, " +

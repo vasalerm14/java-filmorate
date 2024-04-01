@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.ArrayList;
+import java.util.*;
 
 @Component
 public class FilmDbStorage implements FilmStorage {
@@ -72,10 +68,6 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public void validation(Film film) {
-    }
-
-    @Override
     public Film getFilm(Integer id) {
         String sqlQuery = "SELECT * FROM FILM WHERE ID = ?";
         Film film;
@@ -108,25 +100,46 @@ public class FilmDbStorage implements FilmStorage {
         film.setDuration(resultSet.getInt("duration"));
         Integer mpaRatingId = resultSet.getInt("mpaRating_id");
         MpaDb mpaDao = new MpaDb(jdbcTemplate);
-        MPA mpa = mpaDao.getMPAById(mpaRatingId);
-        film.setGenres(getGenresByFilmId(film.getId()));
-        film.setMpa(mpa);
+        Collection<MPA> allMpa = mpaDao.getAllMpa();
+        Map<Integer, List<Genre>> allGenres = getAllFilmGenre();
+        for (MPA searchMpa : allMpa) {
+            if (searchMpa.getId() == mpaRatingId) {
+                film.setMpa(searchMpa);
+                break;
+            }
+        }
+        if (allGenres.get(film.getId()) != null) {
+            film.setGenres(allGenres.get(film.getId()));
+        }
         LikesDb likesDb = new LikesDb(jdbcTemplate);
-        film.setLikes(likesDb.getUsersLikedFilm(film.getId()));
+        Map<Integer, Set<Integer>> allLikes = likesDb.getAllLikes();
+        film.setLikes(allLikes.get(film.getId()));
         return film;
     }
 
-    public Collection<Genre> getGenresByFilmId(Integer filmId) {
-        String sql = "SELECT g.id, g.name FROM Genre g " +
-                "JOIN FilmGenre fg ON g.id = fg.genre_id " +
-                "WHERE fg.film_id = ?";
+    public Map<Integer, List<Genre>> getAllFilmGenre() {
+        String sqlQuery = "SELECT fg.film_id, g.id AS genre_id, g.name AS genre_name " +
+                "FROM FilmGenre fg " +
+                "JOIN Genre g ON fg.genre_id = g.id";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+        Map<Integer, List<Genre>> filmGenreMap = new HashMap<>();
+
+        jdbcTemplate.query(sqlQuery, (resultSet, rowNum) -> {
+            int filmId = resultSet.getInt("film_id");
+            int genreId = resultSet.getInt("genre_id");
+            String genreName = resultSet.getString("genre_name");
+
             Genre genre = new Genre();
-            genre.setId(rs.getInt("id"));
-            genre.setName(rs.getString("name"));
-            return genre;
-        }, filmId);
+            genre.setId(genreId);
+            genre.setName(genreName);
+
+            filmGenreMap.computeIfAbsent(filmId, k -> new ArrayList<>()).add(genre);
+
+            return null;
+        });
+
+
+        return filmGenreMap;
     }
 
 
